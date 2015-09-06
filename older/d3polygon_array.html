@@ -1,0 +1,98 @@
+<meta charset="utf-8">
+    <head>
+        <title>computing place:: topotime 0.1</title>
+    </head>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="data/polys.js"></script>
+<script>
+var vis = d3.select("body").append("svg")
+         .attr("width", 1000)
+         .attr("height", 667),
+
+scaleX = d3.scale.linear()
+        .domain([-30,30])
+        .range([0,600]),
+
+scaleY = d3.scale.linear()
+        .domain([0,50])
+        .range([500,0]),
+
+color = d3.scale.category10();
+
+//var arrayOfPolygons =  [{
+//    "name": "polygon 1",
+//    "points":[
+//      {"x":0.0, "y":25.0},
+//      {"x":8.5,"y":23.4},
+//      {"x":13.0,"y":21.0}    
+//    ]
+//  },
+//  {
+//    "name": "polygon 2",
+//    "points":[
+//      {"x":15.5,"y":23.4},
+//      {"x":18.0,"y":30.0},
+//      {"x":20.0,"y":16.5}
+//    ]
+//  },
+//  {
+//    "name": "polygon 3",
+//    "points":[
+//      {"x":20.5,"y":20.4},
+//      {"x":10.0,"y":27.0},
+//      {"x":22.0,"y":20.5}
+//    ]
+//  },
+//  {
+//    "name": "polygon 4",
+//    "points":[
+//      {"x":5.5,"y":5.4},
+//      {"x":4.0,"y":27.0},
+//      {"x":3.0,"y":20.5},
+//      {"x":8.0,"y":10.5}
+//    ]
+//  }
+//];
+
+vis.selectAll("polygon")
+    .data(arrayOfPolygons)
+  .enter().append("polygon")
+    .attr("points",function(d) { 
+        return d.points.map(function(d) { return [scaleX(d.x),scaleY(d.y)].join(","); }).join(" ");})
+.attr("fill", function(d){return color(d.name)})
+.attr("stroke","#666")
+    .attr("stroke-width",2);
+
+	// add legend   
+	var legend = vis.append("g")
+	  .attr("class", "legend")
+        //.attr("x", w - 65)
+        //.attr("y", 50)
+	  .attr("height", 100)
+	  .attr("width", 100)
+    .attr('transform', 'translate(10,20)');
+          
+    legend 
+      .selectAll('rect')
+      .data(arrayOfPolygons)
+      .enter()
+      .append("rect")
+	  .attr("x", 40)
+      .attr("y", function(d, i){ return i *  20;})
+	  .attr("width", 10)
+	  .attr("height", 10)
+	  .style("fill", function(d) { return color(d.name);});
+      
+    legend.selectAll('text')
+      .data(arrayOfPolygons)
+      .enter()
+      .append("text")
+	  .attr("x", 50)
+      .attr("y", function(d, i){ return i *  20 + 9;})
+	  .text(function(d) {return d.name});
+
+
+</script>
+</body>
+</html>
